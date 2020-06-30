@@ -12,13 +12,9 @@ if ($failedMounting){
 		New-PSDrive -Name "S" -Root "\\judah\junk$" -PSProvider "FileSystem" -Credential $cred
 	}
 	catch{
-		Write-Warning "There was an error with your Username and Password. The program will end. Please try again."
-    		pause
-    		throw "Ending Program"		
+    		throw "There was an error with your Username and Password. The program will end. Please try again."		
 	}
-	Write-Warning "Make sure to close file explorer and run this program again"
-	pause
-    	throw "Ending Program"
+    	throw "Make sure to close file explorer and run this program again"
 }
 New-Item 'C:\OCDrivers\drivers' -ItemType directory
 Copy-Item 'S:\Generic_Plus_UFRII_v2.20_Set-up_x64\Driver\*' 'C:\OCDrivers\drivers'
