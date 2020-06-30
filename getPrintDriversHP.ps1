@@ -17,7 +17,7 @@ if ($failedMounting){
     	throw "Make sure to close file explorer and run this program again"
 }
 New-Item 'C:\OCDrivers\drivers' -ItemType directory
-Copy-Item 'S:\HP Universal Driver_Windows_x64\*' 'C:\OCDrivers\drivers'
+Copy-Item 'S:\hpcu240u.inf' 'C:\OCDrivers\drivers'
 PNPUtil.exe /add-driver 'C:\OCDrivers\drivers\hpcu240u.inf' /install
 Add-PrinterDriver -Name "HP Universal Printing PCL 6"
 Remove-PSDrive -Name S
