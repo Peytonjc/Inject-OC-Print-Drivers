@@ -1,6 +1,6 @@
 $ErrorActionPreference = "Stop"
 $failedMounting = $FALSE
-$cred = Get-Credential
+$cred = Get-Credential -Message "Please enter your OC Username and Password"
 try {
     New-PSDrive -Name "S" -Root "\\software\dist\Install Printers\drivers" -Persist -PSProvider "FileSystem" -Credential $cred
 }
