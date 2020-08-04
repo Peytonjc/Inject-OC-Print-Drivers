@@ -1,6 +1,10 @@
 $ErrorActionPreference = "Stop"
 $failedMounting = $FALSE
 $cred = Get-Credential -Message "Please enter your OC Username and Password"
+
+
+
+
 try {
     New-PSDrive -Name "S" -Root "\\software\dist\Install Printers" -Persist -PSProvider "FileSystem" -Credential $cred
 }
@@ -22,4 +26,6 @@ PNPUtil.exe /add-driver 'C:\OCDrivers\drivers\hpcu240u.inf' /install
 Add-PrinterDriver -Name "HP Universal Printing PCL 6"
 Remove-PSDrive -Name S
 Remove-Item 'C:\OCDrivers\drivers' -recurse -force
+Remove-Item 'C:\OCDrivers' -recurse -force
+
 Write-Warning "Success! The Print Drivers have been added!"
