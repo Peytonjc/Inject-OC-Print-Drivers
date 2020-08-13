@@ -9,7 +9,7 @@ catch {
 }
 if ($failedMounting){
 	try{
-		New-PSDrive -Name "S" -Root "\\judah\junk$" -PSProvider "FileSystem" -Credential $cred
+		New-PSDrive -Name "S" -Root "\\joseph" -PSProvider "FileSystem" -Credential $cred
 	}
 	catch{
     		throw "There was an error with your Username and Password. The program will end. Please try again."		
