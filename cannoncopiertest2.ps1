@@ -2,7 +2,7 @@ $cred = Get-Credential -Message "Please enter your OC Username and Password"
 $name = $cred.UserName
 $printername = "cannon coppier9" 
 $drivername = "Canon Generic Plus UFR II" 
-$student = curl.exe -X GET  -H "X-EOP-AuthToken:D23030AD-5138-4F82-A91F64FFDD94F364" -H "Accept: aplication/json" https://studentprinters.oc.edu/api/rest.cfm/useridhash/?username=$name
+$student = curl.exe -X GET  -H "X-EOP-AuthToken:everonepringapigoeshere" -H "Accept: aplication/json" https://studentprinters.oc.edu/api/rest.cfm/useridhash/?username=$name
 $studentObject = ConvertFrom-Json -InputObject $student
 $studentObject.useridhash
 $portname = 'http://studentprinters.oc.edu:631/ipp/r/'+ $studentObject.useridhash + '/' + '128EE3ED'
