@@ -9,21 +9,24 @@
 #
 function select-printer {
 
-$student = curl.exe -X Post https://localhost:44342/api/PrinterAPi/?username=blaise.mahoro
+$student = curl.exe -X Post https://printid.oc.edu/test/api/PrinterAPi/?username=derrick.karake
 $studentObject = ConvertFrom-Json -InputObject $student
 $studentObject.useridhash
 $portname = 'http://studentprinters.oc.edu:631/ipp/r/'+ $studentObject.useridhash + '/' + '128EE3ED'
 $driverName = "Canon Generic Plus UFR II"
 
-function add-cannon{
-New-Item 'C:\OCDrivers\drivers' -ItemType directory
-Copy-Item 'S:\Generic_Plus_UFRII_v2.20_Set-up_x64\Driver\*' 'C:\OCDrivers\drivers'
-PNPUtil.exe /add-driver 'C:\OCDrivers\drivers\CNLB0MA64.INF' /install
-Add-PrinterDriver -Name $driverName
+#function add-cannon{
+#New-Item 'C:\OCDrivers\drivers' -ItemType directory
+#Copy-Item 'S:\Generic_Plus_UFRII_v2.20_Set-up_x64\Driver\*' 'C:\OCDrivers\drivers'
+#$test4 = $Error[0].ToString()
+#PNPUtil.exe /add-driver 'C:\OCDrivers\drivers\CNLB0MA64.INF' /install
+#Add-PrinterDriver -Name $driverName
+#Remove-PSDrive -Name S
+#Remove-Item 'C:\OCDrivers' -recurse
 
-Add-Printer -Name "Cannon Coppier@studentpritners.oc.edu" -DriverName $driverName -PortName $portname -Verbose
+#Add-Printer -Name "Cannon Coppier@studentpritners.oc.edu2" -DriverName $driverName -PortName $portname -Verbose
 
-}
+
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
@@ -114,13 +117,29 @@ $checkBox3.Checked =$false
 function doit-now {
 if($checkBox1.Checked -eq $TRUE){
 
- add-cannon
+write-host "i am now adding hp pritner"
+ New-Item 'C:\OCDrivers\drivers' -ItemType directory -Verbose
+Copy-Item 'S:\Generic_Plus_UFRII_v2.20_Set-up_x64\Driver\*' 'C:\OCDrivers\drivers'-Verbose
+#$test4 = $Error[0].ToString()
+PNPUtil.exe /add-driver 'C:\OCDrivers\drivers\CNLB0MA64.INF' /install -verbose
+Add-PrinterDriver -Name $driverName -Verbose
+Remove-PSDrive -Name S
+Remove-Item 'C:\OCDrivers' -recurse
 
+Add-Printer -Name "Cannon Coppier@studentpritners.oc.edu" -DriverName $driverName -PortName $portname -Verbose
+write-host "done"
 }
 elseif($checkBox3.Checked -eq $TRUE){
 
-write-host "i am now adding hp pritner" 
+New-Item 'C:\OCDrivers' -ItemType directory -Verbose
+Copy-Item 'S:\drivers' 'C:\OCDrivers' -Recurse -Verbose
+PNPUtil.exe /add-driver 'C:\OCDrivers\drivers\hpcu240u.inf' /install -verbose
+Add-PrinterDriver -Name "HP Universal Printing PCL 6" -Verbose
+Remove-PSDrive -Name S 
+Remove-Item 'C:\OCDrivers\drivers' -recurse -force
+Remove-Item 'C:\OCDrivers' -recurse -force
 
+Add-Printer -Name "Hp pritner@oc.edu" -DriverName "HP Universal Printing PCL 6" -PortName $portname -Verbose
 }
 elseif($checkBox2.Checked -eq $TRUE){
 
@@ -137,7 +156,7 @@ $textBox2.Name = "textBox2"
 $textBox2.ReadOnly = $true
 $textBox2.Size = New-Object System.Drawing.Size(487, 107)
 $textBox2.TabIndex = 4
-$textBox2.AppendText("testing one")
+$textBox2.Text = $test3
 $textBox2.AppendText("testing two")
 #
 # button1
@@ -181,11 +200,11 @@ $Addprinter.Controls.Add($groupBox1)
 $Addprinter.Name = "Addprinter"
 $Addprinter.Text = " add pritners"
 
-function OnLoad_Addprinter {
+#function OnLoad_Addprinter {
 #	[void][System.Windows.Forms.MessageBox]::Show("The event handler Addprinter.Add_Load is not implemented.")
-}
+#}
 
-$Addprinter.Add_Load( { OnLoad_Addprinter } )
+#$Addprinter.Add_Load( { OnLoad_Addprinter } )
 
 <#
 function OnFormClosing_Addprinter{ 
@@ -207,8 +226,12 @@ $ModalResult=$Addprinter.ShowDialog()
 $Addprinter.Dispose()
 #>
 
-$Addprinter.ShowDialog()
 
+
+$result1 = $addprinter.ShowDialog((New-Object System.Windows.Forms.Form -Property @{TopMost = $true }))
+if ($result1 -eq [Windows.Forms.DialogResult]::OK){
+    write-host "at the top"
+}
 
 }
 
@@ -331,15 +354,15 @@ Write-Host "starting again"
 [string]$test3 = $null
 
 $creds = $null
+$name = $null
 
-$creds = Get-Credential -ErrorAction Stop
+$creds = Get-Credential -ErrorAction SilentlyContinue
 
 
 if ($creds.UserName -eq $null )
 {
     write-host "we are quitting"
-
-    break
+    break 
 }
 
 
@@ -356,7 +379,7 @@ catch {
 
 if ($failedMounting -eq '1'){
 	try{
-		New-PSDrive -Name "S" -Root "\\judah\junk$" -PSProvider "FileSystem" -Credential $creds -ErrorAction Stop
+        New-PSDrive -Name "S" -Root "\\joseph" -PSProvider "FileSystem" -Credential $cred -ErrorAction Stop 
 	}
 	catch{
             $tryagain = 1
@@ -373,11 +396,12 @@ if ($tryagain)
     write-host $failedMounting
     Write-Host $tryagain
     try-me 
-} else
+}
 
-{
-
-    write-host "calling select printer" 
+ else {
+ $name = $creds.UserName 
+ select-printer
+  write-host "calling select printer" 
 }
 
 break
@@ -385,7 +409,7 @@ break
 
 function test-1 {
 
-$form1.dispose()
+$form1.Dispose()
 
 write-host $failedMounting
 Write-Host "now in test-1"
@@ -394,3 +418,5 @@ try-login
 
 
 try-login
+
+
