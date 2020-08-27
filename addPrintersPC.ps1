@@ -23,8 +23,7 @@ if ($failedMounting){
 $name = $cred.Username
 $name = $name.replace('oc\','')
 $apiName = 'https://printid.oc.edu/test/api/PrinterAPi/?username=' + $name
-Write-Warning $name
-$student = curl.exe -X Post $apiName
+$student = curl.exe -X Post --silent $apiName
 $studentObject = ConvertFrom-Json -InputObject $student
 $studentObject.useridhash
 $portname = 'http://studentprinters.oc.edu:631/ipp/r/'+ $studentObject.useridhash + '/' + '128EE3ED'
